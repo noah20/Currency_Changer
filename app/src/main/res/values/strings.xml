@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Currency Changer</string>
+    <string name="str_no_connection">no internet connection</string>
+    <string name="str_general_error">general error</string>
 </resources>
