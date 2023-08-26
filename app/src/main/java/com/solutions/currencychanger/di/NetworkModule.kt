@@ -2,7 +2,10 @@ package com.solutions.currencychanger.di
 
 import android.content.Context
 import com.solutions.currencychanger.BuildConfig
+import com.solutions.currencychanger.data.data_source.FixerServiceDataSource
 import com.solutions.currencychanger.data.repo.FixerApi
+import com.solutions.currencychanger.presentation.LatestRatesUseCase
+import com.solutions.currencychanger.presentation.LatestRatesUseCaseImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,6 +43,11 @@ object NetworkModule {
     @Provides
     fun provideFixerApiService(retrofit: Retrofit):FixerApi{
         return retrofit.create(FixerApi::class.java)
+    }
+
+    @Provides
+    fun provideFixerServiceDataSource(dataSource: FixerServiceDataSource): LatestRatesUseCase {
+        return LatestRatesUseCaseImp(dataSource)
     }
 
 
