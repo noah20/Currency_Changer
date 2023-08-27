@@ -57,7 +57,7 @@ class LatestRatesViewModel @Inject constructor(private val latestUseCase:LatestR
         mBaseCurrencySelected.value = mToCurrencySelected.value?.also {
             mToCurrencySelected.value = mBaseCurrencySelected.value
         }
-        toAmount.value = latestUseCase.calculateToAmount(mBaseCurrencySelected.value!! , mToCurrencySelected.value!! , mFromAmount?.toDouble() ?: 1.0 ).toString()
+        toAmount.value = formatter.format(latestUseCase.calculateToAmount(mBaseCurrencySelected.value!! , mToCurrencySelected.value!! , mFromAmount?.toDouble() ?: 1.0 ))
 
     }
 
