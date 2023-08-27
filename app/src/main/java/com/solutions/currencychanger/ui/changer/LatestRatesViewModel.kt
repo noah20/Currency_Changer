@@ -1,6 +1,6 @@
 package com.solutions.currencychanger.ui.changer
 
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.solutions.currencychanger.data.models.CurrencyModel
@@ -14,6 +14,7 @@ class LatestRatesViewModel @Inject constructor(private val latestUseCase:LatestR
     val mBaseCurrencySelected = MutableLiveData<CurrencyModel>()
     val mToCurrencySelected= MutableLiveData<CurrencyModel>()
     val toAmount = MutableLiveData<String>()
+    val fromAmount = MutableLiveData<String>()
     private var mFromAmount:String? = "1"
 
     private val formatter: DecimalFormat = DecimalFormat("#.####")
@@ -61,5 +62,20 @@ class LatestRatesViewModel @Inject constructor(private val latestUseCase:LatestR
 
     }
 
+    fun onFromTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+        if(count > 1 && before != 0){ return }
+        if(!text.isNullOrEmpty()){
+            mFromAmount = text.toString()
+            mFromAmount?.let {
+                toAmount.value = getToAmount(it)
+            }
+        }
+    }
+    fun onToTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+        if(count > 1 && before != 0){ return }
+        if(!text.isNullOrEmpty()){
+            fromAmount.value = getFromAmount(text.toString())
+        }
+    }
 
 }
