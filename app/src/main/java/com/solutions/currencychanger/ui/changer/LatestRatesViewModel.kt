@@ -1,5 +1,6 @@
 package com.solutions.currencychanger.ui.changer
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.solutions.currencychanger.data.models.CurrencyModel
@@ -10,52 +11,55 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LatestRatesViewModel @Inject constructor(private val latestUseCase:LatestRatesUseCase) : ViewModel() {
-    private var mBaseCurrencySelected:CurrencyModel? = null
-    private var mToCurrencySelected:CurrencyModel? = null
-    val fromAmount = MutableLiveData<String>()
+    val mBaseCurrencySelected = MutableLiveData<CurrencyModel>()
+    val mToCurrencySelected= MutableLiveData<CurrencyModel>()
     val toAmount = MutableLiveData<String>()
-    private var mFromAmount:String? = null
+    private var mFromAmount:String? = "1"
 
     private val formatter: DecimalFormat = DecimalFormat("#.####")
 
     fun getLatestRates(forceUpdate: Boolean = false , base: String) = latestUseCase.getLatestRates(forceUpdate , base)
 
     fun setBaseCurrency(currency: CurrencyModel) {
-        if(mBaseCurrencySelected?.label == currency.label)
+        if(mBaseCurrencySelected.value?.label == currency.label)
             return
-        mBaseCurrencySelected = currency
-        if(mToCurrencySelected != null)
-            toAmount.value = latestUseCase.calculateToAmount(mBaseCurrencySelected!! , mToCurrencySelected!! , mFromAmount?.toDouble() ?: 0.0 ).toString()
+        mBaseCurrencySelected.value = currency
+        if(mToCurrencySelected.value != null)
+            toAmount.value = latestUseCase.calculateToAmount(mBaseCurrencySelected.value!! , mToCurrencySelected.value!! , mFromAmount?.toDouble() ?: 1.0 ).toString()
 
     }
-
-    fun getFromCurrency() = mBaseCurrencySelected
-
     fun setToCurrency(currency: CurrencyModel) {
-        if(mToCurrencySelected?.label == currency.label)
+        if(mToCurrencySelected.value?.label == currency.label)
             return
-        mToCurrencySelected = currency
-        if(mBaseCurrencySelected != null)
-            toAmount.value = latestUseCase.calculateToAmount(mBaseCurrencySelected!! , mToCurrencySelected!! , mFromAmount?.toDouble() ?: 0.0 ).toString()
+        mToCurrencySelected.value = currency
+        if(mBaseCurrencySelected.value != null)
+            toAmount.value = latestUseCase.calculateToAmount(mBaseCurrencySelected.value!! , mToCurrencySelected.value!! , mFromAmount?.toDouble() ?: 1.0 ).toString()
 
     }
 
-    fun getToCurrency() = mToCurrencySelected
+    fun shouldFetchForCurrency(newCurrency: String) = latestUseCase.shouldFetchFromCurrency( mToCurrencySelected.value ,newCurrency)
 
-    fun shouldFetchForCurrency(newCurrency: String) = latestUseCase.shouldFetchFromCurrency( mToCurrencySelected ,newCurrency)
-
-    fun shouldFetchToCurrency(newCurrency: String) = latestUseCase.shouldFetchToCurrency(mBaseCurrencySelected  ,newCurrency)
+    fun shouldFetchToCurrency(newCurrency: String) = latestUseCase.shouldFetchToCurrency(mBaseCurrencySelected.value  ,newCurrency)
 
     fun getToAmount(amount:String): String {
-        return formatter.format(latestUseCase.calculateToAmount(mBaseCurrencySelected!!,mToCurrencySelected!!,amount.toDouble()))
+        return formatter.format(latestUseCase.calculateToAmount(mBaseCurrencySelected.value!!,mToCurrencySelected.value!!,amount.toDouble()))
     }
 
     fun getFromAmount(amount:String): String {
-        return formatter.format(latestUseCase.calculateFromAmount(mBaseCurrencySelected!!,mToCurrencySelected!!,amount.toDouble()))
+        return formatter.format(latestUseCase.calculateFromAmount(mBaseCurrencySelected.value!!,mToCurrencySelected.value!!,amount.toDouble()))
     }
 
     fun setSelectedAmount(amount:String){
         mFromAmount = amount
     }
+    fun swapCurrency() {
+
+        mBaseCurrencySelected.value = mToCurrencySelected.value?.also {
+            mToCurrencySelected.value = mBaseCurrencySelected.value
+        }
+        toAmount.value = latestUseCase.calculateToAmount(mBaseCurrencySelected.value!! , mToCurrencySelected.value!! , mFromAmount?.toDouble() ?: 1.0 ).toString()
+
+    }
+
 
 }

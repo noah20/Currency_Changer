@@ -3,6 +3,7 @@ package com.solutions.currencychanger.ui.changer
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -46,8 +47,9 @@ class LatestRatesFragment : Fragment() {
 
     val toTextWatcher:TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(text: Editable?) {
+        override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+            if(count > 1 && ! mBinding?.etFromAmount?.text.isNullOrEmpty())
+                return
             mBinding?.etFromAmount?.removeTextChangedListener(fromTextWatcher)
             if(!text.isNullOrEmpty()){
                 mBinding?.etToAmount?.setSelection(text.length)
@@ -55,12 +57,14 @@ class LatestRatesFragment : Fragment() {
             }
             mBinding?.etFromAmount?.addTextChangedListener(fromTextWatcher)
         }
+        override fun afterTextChanged(text: Editable?) {
+
+        }
     }
 
     val fromTextWatcher:TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(text: Editable?) {
+        override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
             mBinding?.etToAmount?.removeTextChangedListener(toTextWatcher)
             if(!text.isNullOrEmpty()){
                 mBinding?.etFromAmount?.setSelection(text.length)
@@ -70,6 +74,7 @@ class LatestRatesFragment : Fragment() {
             }
             mBinding?.etToAmount?.addTextChangedListener(toTextWatcher)
         }
+        override fun afterTextChanged(text: Editable?) {}
     }
 
     private fun getLatestRates(base:String) {
@@ -94,9 +99,6 @@ class LatestRatesFragment : Fragment() {
         val toCurrency = CurrencyModel("EGP", latestRates.rates["EGP"] ?: 0.0)
         viewModel.setToCurrency( toCurrency )
         viewModel.setBaseCurrency(baseCurrency)
-        mBinding?.fromList?.text = baseCurrency.label
-        mBinding?.toList?.text = toCurrency.label
-
         mBinding?.toList?.setOnClickListener {
             val selector = CurrencySelectorDialog.newInstance(latestRates)
             selector.attachListener(object : CurrencySelectorDialog.OnCurrencySelected {
@@ -124,6 +126,9 @@ class LatestRatesFragment : Fragment() {
                 }
             })
             selector.show(childFragmentManager , "selector")
+        }
+        mBinding?.btnSwap?.setOnClickListener {
+            viewModel.swapCurrency()
         }
     }
 
