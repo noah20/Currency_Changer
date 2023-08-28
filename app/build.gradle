@@ -92,5 +92,7 @@ dependencies {
     // Kotlin
     implementation "androidx.fragment:fragment-ktx:1.5.7"
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
 }

@@ -11,5 +11,16 @@
         android:label="LatestRatesFragment"
         tools:layout="@layout/fragment_latest_rates">
 
+        <action
+            android:id="@+id/latestRate_to_historical"
+            app:destination="@+id/historicalFragment" />
+
     </fragment>
+
+    <fragment
+        android:id="@+id/historicalFragment"
+        android:name="com.solutions.currencychanger.ui.chart.HistoricalFragment"
+        android:label="HistoricalFragment"
+        tools:layout="@layout/fragment_historical"/>
+
 </navigation>

@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.solutions.currencychanger.R
 import com.solutions.currencychanger.data.models.CurrencyModel
 import com.solutions.currencychanger.data.models.LatestRatesResponse
 import com.solutions.currencychanger.databinding.FragmentLatestRatesBinding
@@ -33,6 +35,11 @@ class LatestRatesFragment : Fragment() {
             mBinding?.viewmodel = viewModel
             mBinding?.lifecycleOwner = this
             getLatestRates("EUR")
+
+            mBinding?.btnDetails?.setOnClickListener {
+                findNavController().navigate(R.id.latestRate_to_historical)
+            }
+
         }
         return mBinding?.root
 
@@ -129,6 +136,9 @@ class LatestRatesFragment : Fragment() {
         }
         mBinding?.btnSwap?.setOnClickListener {
             viewModel.swapCurrency()
+        }
+        mBinding?.btnDetails?.setOnClickListener {
+            findNavController().navigate(R.id.latestRate_to_historical)
         }
     }
 
