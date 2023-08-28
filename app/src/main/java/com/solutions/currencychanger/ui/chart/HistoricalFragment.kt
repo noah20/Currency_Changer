@@ -14,8 +14,8 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.solutions.currencychanger.R
+import com.solutions.currencychanger.data.models.CurrencyHistoricalResponse
 import com.solutions.currencychanger.databinding.FragmentHistoricalBinding
-import com.solutions.currencychanger.utils.handleApiError
 import com.solutions.currencychanger.utils.handleAppException
 import com.solutions.currencychanger.wrapper.ResultWrapper
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +50,7 @@ class HistoricalFragment : Fragment() {
                if (it.isSuccess) {
                    val currencyData = viewModel.getToCurrencyData(it.data ?: emptyList() , toCurrency)
                    updateChartWithData(mBinding?.lineChart!!,  currencyData)
+                   updateHistoricalList(it.data)
                }else  if(it.status == ResultWrapper.STATUS.FAILED){
                    it.error?.let { error -> requireActivity().handleAppException(error) }
                }
@@ -65,6 +66,11 @@ class HistoricalFragment : Fragment() {
         return mBinding?.root
 
     }
+
+    private fun updateHistoricalList(currencyData: List<CurrencyHistoricalResponse>?) {
+        mBinding?.rvHistorical?.adapter = HistoricalAdapter(currencyData ?: emptyList() , toCurrency)
+    }
+
     private fun setupChart(lineChart: LineChart) {
         lineChart.description.isEnabled = false
         lineChart.setTouchEnabled(true)
