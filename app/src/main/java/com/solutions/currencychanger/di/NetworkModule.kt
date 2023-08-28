@@ -4,6 +4,9 @@ import android.content.Context
 import com.solutions.currencychanger.BuildConfig
 import com.solutions.currencychanger.domain.FixerServiceDataSource
 import com.solutions.currencychanger.data.repo.FixerApi
+import com.solutions.currencychanger.domain.HistoricalDataSource
+import com.solutions.currencychanger.presentation.HistoricalUseCases
+import com.solutions.currencychanger.presentation.HistoricalUseCasesImp
 import com.solutions.currencychanger.presentation.LatestRatesUseCase
 import com.solutions.currencychanger.presentation.LatestRatesUseCaseImp
 import dagger.Module
@@ -25,8 +28,8 @@ object NetworkModule {
     fun provideHTTPClient(@ApplicationContext context: Context): OkHttpClient {
 
         val httpClient = OkHttpClient.Builder()
-        httpClient.connectTimeout(60L , TimeUnit.SECONDS)
-        httpClient.readTimeout(60L , TimeUnit.SECONDS)
+        httpClient.connectTimeout(60L, TimeUnit.SECONDS)
+        httpClient.readTimeout(60L, TimeUnit.SECONDS)
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         httpClient.addInterceptor(interceptor)
@@ -44,13 +47,18 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideFixerApiService(retrofit: Retrofit):FixerApi{
+    fun provideFixerApiService(retrofit: Retrofit): FixerApi {
         return retrofit.create(FixerApi::class.java)
     }
 
     @Provides
     fun provideFixerServiceDataSource(dataSource: FixerServiceDataSource): LatestRatesUseCase {
         return LatestRatesUseCaseImp(dataSource)
+    }
+
+    @Provides
+    fun provideHistoricalUseCases(historical: HistoricalDataSource): HistoricalUseCases {
+        return HistoricalUseCasesImp(historical)
     }
 
 
