@@ -33,6 +33,7 @@ class FixerChangerRepo @Inject constructor(private val fixerApi: FixerApi) {
 
     fun getHistoricalData(base: String, symbols: String, forDays: List<String>) = flow {
         try {
+            emit(ResultWrapper.Loading())
             val deferredResults = mutableListOf<Deferred<CurrencyHistoricalResponse>>()
             val jobList = mutableListOf<Job>()
             forDays.forEach {
@@ -44,8 +45,14 @@ class FixerChangerRepo @Inject constructor(private val fixerApi: FixerApi) {
             }
             jobList.joinAll()
             val results = deferredResults.map { it.await() }
-            emit(ResultWrapper.Success(results))
-            results.forEach { println(it) }
+            val isValid = results.filter { ! it.success }
+            if(isValid.isEmpty())
+                emit(ResultWrapper.Success(results))
+            else{
+                val failed = isValid[0]
+                emit(ResultWrapper.Error(failed.error.code , java.lang.Exception(failed.error.type)))
+            }
+
         } catch (e: Exception) {
             emit(ResultWrapper.Error(throwable = e))
         }

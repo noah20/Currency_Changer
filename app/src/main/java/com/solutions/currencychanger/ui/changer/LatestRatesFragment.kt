@@ -20,6 +20,8 @@ import com.solutions.currencychanger.ui.chart.KEY_BASE_CURRENCY
 import com.solutions.currencychanger.ui.chart.KEY_TO_CURRENCY
 import com.solutions.currencychanger.ui.dialogs.CurrencySelectorDialog
 import com.solutions.currencychanger.utils.handleApiError
+import com.solutions.currencychanger.utils.handleAppException
+import com.solutions.currencychanger.wrapper.ResultWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -94,6 +96,8 @@ class LatestRatesFragment : Fragment() {
                     }else{
                         activity?.handleApiError("APi Error",it.data?.error?.type)
                     }
+                }else if(it.status == ResultWrapper.STATUS.FAILED){
+                    it.error?.let { error -> requireActivity().handleAppException(error) }
                 }
             }
         }

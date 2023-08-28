@@ -6,5 +6,6 @@ data class CurrencyHistoricalResponse(
     val historical: Boolean,
     val rates: Map<String,Float>,
     val success: Boolean,
-    val timestamp: Long
+    val timestamp: Long,
+    val error: ApiError
 )

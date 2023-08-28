@@ -15,6 +15,9 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.solutions.currencychanger.R
 import com.solutions.currencychanger.databinding.FragmentHistoricalBinding
+import com.solutions.currencychanger.utils.handleApiError
+import com.solutions.currencychanger.utils.handleAppException
+import com.solutions.currencychanger.wrapper.ResultWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
@@ -43,9 +46,13 @@ class HistoricalFragment : Fragment() {
 
        lifecycleScope.launch {
            viewModel.getHistorical(baseCurrency , arrayOf(toCurrency)).collect{
-               val currencyData = viewModel.getToCurrencyData(it.data ?: emptyList() , toCurrency)
-               updateChartWithData(mBinding?.lineChart!!,  currencyData)
-
+               mBinding?.response = it
+               if (it.isSuccess) {
+                   val currencyData = viewModel.getToCurrencyData(it.data ?: emptyList() , toCurrency)
+                   updateChartWithData(mBinding?.lineChart!!,  currencyData)
+               }else  if(it.status == ResultWrapper.STATUS.FAILED){
+                   it.error?.let { error -> requireActivity().handleAppException(error) }
+               }
            }
        }
         lifecycleScope.launch {

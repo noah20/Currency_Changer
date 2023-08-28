@@ -42,11 +42,15 @@ class LatestRatesViewModel @Inject constructor(private val latestUseCase:LatestR
 
     fun shouldFetchToCurrency(newCurrency: String) = latestUseCase.shouldFetchToCurrency(mBaseCurrencySelected.value  ,newCurrency)
 
-    fun getToAmount(amount:String): String {
+    fun getToAmount(amount:String): String? {
+        if(mBaseCurrencySelected.value == null || mToCurrencySelected.value == null)
+            return null
         return formatter.format(latestUseCase.calculateToAmount(mBaseCurrencySelected.value!!,mToCurrencySelected.value!!,amount.toDouble()))
     }
 
-    fun getFromAmount(amount:String): String {
+    fun getFromAmount(amount:String): String? {
+        if(mBaseCurrencySelected.value == null || mToCurrencySelected.value == null)
+            return null
         return formatter.format(latestUseCase.calculateFromAmount(mBaseCurrencySelected.value!!,mToCurrencySelected.value!!,amount.toDouble()))
     }
 
@@ -67,14 +71,14 @@ class LatestRatesViewModel @Inject constructor(private val latestUseCase:LatestR
         if(!text.isNullOrEmpty()){
             mFromAmount = text.toString()
             mFromAmount?.let {
-                toAmount.value = getToAmount(it)
+                toAmount.value = getToAmount(it) ?: ""
             }
         }
     }
     fun onToTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
         if(count > 1 && before != 0){ return }
         if(!text.isNullOrEmpty()){
-            fromAmount.value = getFromAmount(text.toString())
+            fromAmount.value = getFromAmount(text.toString()) ?: ""
         }
     }
 
