@@ -1,4 +1,4 @@
-package com.solutions.currencychanger.data.data_source
+package com.solutions.currencychanger.domain
 
 import com.solutions.currencychanger.data.models.LatestRatesResponse
 import com.solutions.currencychanger.data.repo.FixerApi

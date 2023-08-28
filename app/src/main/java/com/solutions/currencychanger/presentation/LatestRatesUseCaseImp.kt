@@ -1,6 +1,6 @@
 package com.solutions.currencychanger.presentation
 
-import com.solutions.currencychanger.data.data_source.FixerServiceDataSource
+import com.solutions.currencychanger.domain.FixerServiceDataSource
 import com.solutions.currencychanger.data.models.CurrencyModel
 import javax.inject.Inject
 

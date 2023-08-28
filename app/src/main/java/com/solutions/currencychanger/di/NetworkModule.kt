@@ -2,7 +2,7 @@ package com.solutions.currencychanger.di
 
 import android.content.Context
 import com.solutions.currencychanger.BuildConfig
-import com.solutions.currencychanger.data.data_source.FixerServiceDataSource
+import com.solutions.currencychanger.domain.FixerServiceDataSource
 import com.solutions.currencychanger.data.repo.FixerApi
 import com.solutions.currencychanger.presentation.LatestRatesUseCase
 import com.solutions.currencychanger.presentation.LatestRatesUseCaseImp
