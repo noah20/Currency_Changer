@@ -18,4 +18,6 @@ interface HistoricalUseCases {
 
     fun getHistoricalDaysList(numberOfDays:Int):List<String>
 
+    fun getTopCurrency(rates: Map<String, Double>?): List<Pair<String, Double>>
+
 }

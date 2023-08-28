@@ -15,6 +15,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.solutions.currencychanger.R
 import com.solutions.currencychanger.data.models.CurrencyHistoricalResponse
+import com.solutions.currencychanger.data.models.LatestRatesResponse
 import com.solutions.currencychanger.databinding.FragmentHistoricalBinding
 import com.solutions.currencychanger.utils.handleAppException
 import com.solutions.currencychanger.wrapper.ResultWrapper
@@ -59,12 +60,18 @@ class HistoricalFragment : Fragment() {
         lifecycleScope.launch {
 
             viewModel.getLatestRateForCurrency(baseCurrency).collect{
-
+                if (it.isSuccess) {
+                   setUpTopCurrency(it.data)
+                }
             }
         }
 
         return mBinding?.root
 
+    }
+
+    private fun setUpTopCurrency(data: LatestRatesResponse?) {
+        mBinding?.rvTopCurrency?.adapter = TopCurrencyAdapter(viewModel.getTopCurrency(data?.rates) , data?.base ?: "")
     }
 
     private fun updateHistoricalList(currencyData: List<CurrencyHistoricalResponse>?) {

@@ -25,4 +25,5 @@ class HistoricalViewModel @Inject constructor(private val useCase: HistoricalUse
     fun getDateLabels(data: List<Pair<Date, Float>>): List<String>  = useCase.getDateLabels(data)
 
     fun getToCurrencyData(historical: List<CurrencyHistoricalResponse> , currency:String) = useCase.getHistoricalChartData(historical , currency)
+    fun getTopCurrency(rates: Map<String, Double>?) = useCase.getTopCurrency(rates)
 }

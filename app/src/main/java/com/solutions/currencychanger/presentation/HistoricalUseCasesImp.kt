@@ -67,4 +67,11 @@ class HistoricalUseCasesImp @Inject constructor(private val historicalDataSource
         return mutableList
     }
 
+    override fun getTopCurrency(rates: Map<String, Double>?): List<Pair<String, Double>> {
+        val top = listOf("USD","GBP","GIP","KWD","BHD" ,"OMR","JOD","KYD","CHF","AED")
+        return rates?.filter {
+            top.contains(it.key)
+        }?.toList() ?: emptyList()
+    }
+
 }
