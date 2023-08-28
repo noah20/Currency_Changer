@@ -41,6 +41,26 @@ class LatestRatesUseCaseImp @Inject constructor(private val dataSource: FixerSer
         return dataSource.getBaseCurrency()
     }
 
+    override fun getActualBaseCurrency(
+        baseCurrency: CurrencyModel,
+        toCurrency: CurrencyModel
+    ): String {
+        return if(baseCurrency.label == getApiBaseCurrency()){
+            baseCurrency.label
+        }else
+            toCurrency.label
+    }
+
+    override fun getActualToCurrency(
+        baseCurrency: CurrencyModel,
+        toCurrency: CurrencyModel
+    ): String {
+        return if(baseCurrency.label == getApiBaseCurrency()){
+            toCurrency.label
+        }else
+            baseCurrency.label
+    }
+
     override fun shouldFetchFromCurrency(
         toCurrencySelected: CurrencyModel?,
         newCurrency: String

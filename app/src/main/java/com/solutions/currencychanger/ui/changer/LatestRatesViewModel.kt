@@ -78,4 +78,17 @@ class LatestRatesViewModel @Inject constructor(private val latestUseCase:LatestR
         }
     }
 
+    fun getActualBaseCurrency(): String? {
+        if(mBaseCurrencySelected.value == null || mToCurrencySelected.value == null)
+            return null
+        return latestUseCase.getActualBaseCurrency(mBaseCurrencySelected.value!!,mToCurrencySelected.value!!)
+    }
+
+    fun getActualToCurrency(): String? {
+        if(mBaseCurrencySelected.value == null || mToCurrencySelected.value == null)
+            return null
+        return latestUseCase.getActualToCurrency(mBaseCurrencySelected.value!!,mToCurrencySelected.value!!)
+    }
+
+
 }

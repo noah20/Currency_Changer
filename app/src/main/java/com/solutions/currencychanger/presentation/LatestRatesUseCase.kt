@@ -14,6 +14,8 @@ interface LatestRatesUseCase {
     fun calculateToAmount(baseCurrency: CurrencyModel, toCurrency: CurrencyModel, amount:Double):Double
 
     fun getApiBaseCurrency():String?
+    fun getActualBaseCurrency(baseCurrency: CurrencyModel, toCurrency: CurrencyModel):String?
+    fun getActualToCurrency(baseCurrency: CurrencyModel, toCurrency: CurrencyModel):String?
 
     fun shouldFetchFromCurrency(toCurrencySelected: CurrencyModel?, newCurrency: String): Boolean
 

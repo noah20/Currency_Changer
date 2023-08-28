@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,8 @@ import com.solutions.currencychanger.R
 import com.solutions.currencychanger.data.models.CurrencyModel
 import com.solutions.currencychanger.data.models.LatestRatesResponse
 import com.solutions.currencychanger.databinding.FragmentLatestRatesBinding
+import com.solutions.currencychanger.ui.chart.KEY_BASE_CURRENCY
+import com.solutions.currencychanger.ui.chart.KEY_TO_CURRENCY
 import com.solutions.currencychanger.ui.dialogs.CurrencySelectorDialog
 import com.solutions.currencychanger.utils.handleApiError
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,10 +38,6 @@ class LatestRatesFragment : Fragment() {
             mBinding?.viewmodel = viewModel
             mBinding?.lifecycleOwner = this
             getLatestRates("EUR")
-
-            mBinding?.btnDetails?.setOnClickListener {
-                findNavController().navigate(R.id.latestRate_to_historical)
-            }
 
         }
         return mBinding?.root
@@ -138,7 +137,10 @@ class LatestRatesFragment : Fragment() {
             viewModel.swapCurrency()
         }
         mBinding?.btnDetails?.setOnClickListener {
-            findNavController().navigate(R.id.latestRate_to_historical)
+            val data = bundleOf(
+                KEY_BASE_CURRENCY to viewModel.getActualBaseCurrency(),
+                KEY_TO_CURRENCY to viewModel.getActualToCurrency(),)
+            findNavController().navigate(R.id.latestRate_to_historical , data)
         }
     }
 
