@@ -13,7 +13,7 @@ class LatestRatesUseCaseImp @Inject constructor(private val dataSource: FixerSer
 
         return if(toCurrency.label != baseCurrency.label)
             if(getApiBaseCurrency() == toCurrency.label){
-                (amount * (toCurrency.rate ))
+                (amount * (baseCurrency.rate ))
             }else{
                 (amount/(toCurrency.rate))
             }
