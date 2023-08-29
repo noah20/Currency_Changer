@@ -62,7 +62,7 @@ class LatestViewModelUnitTest {
     fun testApiCall() : Unit = runBlocking {
         val mockResponse:LatestRatesResponse = Gson().fromJson(MockedDataClass.getLatestRatesJSONResponse() , LatestRatesResponse::class.java)
         Mockito.`when`(latestUseCase.getLatestRates(false,"EUR")).thenReturn(flowOf(ResultWrapper.Success(mockResponse)))
-        val resultFlow = viewModel.getLatestRates(true,"EGP")
+        val resultFlow = viewModel.getLatestRates(true,"EUR")
         val job = async {
             resultFlow.collect {
                 Assert.assertEquals(it.data?.base , "EUR")
