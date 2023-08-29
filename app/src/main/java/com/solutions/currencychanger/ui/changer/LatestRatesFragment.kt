@@ -59,9 +59,13 @@ class LatestRatesFragment : Fragment() {
             if(count > 1 && ! mBinding?.etFromAmount?.text.isNullOrEmpty())
                 return
             mBinding?.etFromAmount?.removeTextChangedListener(fromTextWatcher)
-            if(!text.isNullOrEmpty()){
-                mBinding?.etToAmount?.setSelection(text.length)
-                mBinding?.etFromAmount?.setText(viewModel.getFromAmount(text.toString()))
+            try {
+                if(!text.isNullOrEmpty()){
+                    mBinding?.etToAmount?.setSelection(text.length)
+                    mBinding?.etFromAmount?.setText(viewModel.getFromAmount(text.toString()))
+                }
+            }catch (e:Exception){
+
             }
             mBinding?.etFromAmount?.addTextChangedListener(fromTextWatcher)
         }
@@ -74,11 +78,16 @@ class LatestRatesFragment : Fragment() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
             mBinding?.etToAmount?.removeTextChangedListener(toTextWatcher)
-            if(!text.isNullOrEmpty()){
-                mBinding?.etFromAmount?.setSelection(text.length)
-                val amount = text.toString()
-                viewModel.setSelectedAmount(amount)
-                mBinding?.etToAmount?.setText(viewModel.getToAmount(amount))
+            try {
+                if(!text.isNullOrEmpty()){
+                    mBinding?.etFromAmount?.setSelection(text.length)
+                    val amount = text.toString()
+                    viewModel.setSelectedAmount(amount)
+                    mBinding?.etToAmount?.setText(viewModel.getToAmount(amount))
+                }
+
+            }catch (_ :Exception){
+
             }
             mBinding?.etToAmount?.addTextChangedListener(toTextWatcher)
         }
