@@ -147,7 +147,12 @@ class LatestRatesFragment : Fragment() {
             selector.show(childFragmentManager , "selector")
         }
         mBinding?.btnSwap?.setOnClickListener {
-            viewModel.swapCurrency()
+            val amount = mBinding?.etFromAmount?.text?.toString()
+            if(!amount.isNullOrBlank()){
+                viewModel.swapCurrency(amount)
+            }else
+                viewModel.swapCurrency(null)
+
         }
         mBinding?.btnDetails?.setOnClickListener {
             val data = bundleOf(

@@ -57,12 +57,12 @@ class LatestRatesViewModel @Inject constructor(private val latestUseCase:LatestR
     fun setSelectedAmount(amount:String){
         mFromAmount = amount
     }
-    fun swapCurrency() {
+    fun swapCurrency(amount:String?) {
 
         mBaseCurrencySelected.value = mToCurrencySelected.value?.also {
             mToCurrencySelected.value = mBaseCurrencySelected.value
         }
-        toAmount.value = formatter.format(latestUseCase.calculateToAmount(mBaseCurrencySelected.value!! , mToCurrencySelected.value!! , mFromAmount?.toDouble() ?: 1.0 ))
+        toAmount.value = formatter.format(latestUseCase.calculateToAmount(mBaseCurrencySelected.value!! , mToCurrencySelected.value!! , amount?.toDouble() ?: 1.0 ))
 
     }
 
